@@ -1,8 +1,14 @@
 package cn.qlq.bean.user;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Token {
+public class Token implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8121208222028185645L;
+
 	private Integer id;
 
 	private Date createtime;

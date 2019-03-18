@@ -7,7 +7,6 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import cn.qlq.bean.user.Token;
 import cn.qlq.bean.user.TokenExample;
@@ -18,7 +17,7 @@ import cn.qlq.utils.DefaultValue;
 import cn.qlq.utils.MD5Util;
 
 @Service
-@Transactional
+@com.alibaba.dubbo.config.annotation.Service(version = "1.0.0")
 public class TokenServiceImpl implements TokenService {
 	@Autowired
 	private TokenMapper tokenMapper;

@@ -1,28 +1,23 @@
 package cn.qlq.controller;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.MapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.github.pagehelper.PageHelper;
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.github.pagehelper.PageInfo;
 
 import cn.qlq.annotation.MyLogAnnotation;
 import cn.qlq.bean.user.User;
 import cn.qlq.service.user.UserService;
-import cn.qlq.utils.DefaultValue;
 import cn.qlq.utils.JSONResultUtil;
 import cn.qlq.utils.ValidateCheck;
 
@@ -32,7 +27,7 @@ public class UserController {
 
 	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
-	@Autowired
+	@Reference(version = "1.0.0")
 	private UserService userService;
 
 	/**
@@ -58,27 +53,19 @@ public class UserController {
 	 * @return
 	 */
 	@RequestMapping("getUsers")
-//	@Cacheable(value = "usersCache", keyGenerator = "keyGenerator") // 在redis中开启key为findAllUser开头的存储空间。key和keyGenerator只能使用一个
+	// @Cacheable(value = "usersCache", keyGenerator = "keyGenerator") //
+	// 在redis中开启key为findAllUser开头的存储空间。key和keyGenerator只能使用一个
 	@MyLogAnnotation(operateDescription = "分页查询用户")
 	@ResponseBody
 	public PageInfo<User> getUsers(@RequestParam Map condition) {
-		int pageNum = 1;
-		if (ValidateCheck.isNotNull(MapUtils.getString(condition, "pageNum"))) { // 如果不为空的话改变当前页号
-			pageNum = Integer.parseInt(MapUtils.getString(condition, "pageNum"));
+		if (ValidateCheck.isNull(MapUtils.getString(condition, "pageNum"))) { // 如果不为空的话改变当前页号
+			condition.put("pageNum", 1);
 		}
-		int pageSize = DefaultValue.PAGE_SIZE;
-		if (ValidateCheck.isNotNull(MapUtils.getString(condition, "pageSize"))) { // 如果不为空的话改变当前页大小
-			pageSize = Integer.parseInt(MapUtils.getString(condition, "pageSize"));
+		if (ValidateCheck.isNull(MapUtils.getString(condition, "pageSize"))) { // 如果不为空的话改变当前页大小
+			condition.put("pageSize", 6);
 		}
-		// 开始分页
-		PageHelper.startPage(pageNum, pageSize);
-		List<User> users = new ArrayList<User>();
-		try {
-			users = userService.getUsers(condition);
-		} catch (Exception e) {
-			logger.error("getUsers error！", e);
-		}
-		PageInfo<User> pageInfo = new PageInfo<User>(users);
+
+		PageInfo<User> pageInfo = userService.getPageInfoUsers(condition);
 		return pageInfo;
 	}
 

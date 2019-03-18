@@ -1,8 +1,14 @@
 package cn.qlq.bean.user;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class User {
+public class User implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3800726382146395894L;
+
 	private Integer id;
 
 	private String username;

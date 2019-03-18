@@ -4,10 +4,11 @@ import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.alibaba.dubbo.config.annotation.Reference;
 
 import cn.qlq.bean.user.Token;
 import cn.qlq.bean.user.User;
@@ -25,7 +26,7 @@ import cn.qlq.utils.JSONResultUtil;
 public class MobileLoginController {
 	private static final Logger logger = LoggerFactory.getLogger(MobileLoginController.class);
 
-	@Autowired
+	@Reference(version = "1.0.0")
 	private TokenService tokenService;
 
 	/**
