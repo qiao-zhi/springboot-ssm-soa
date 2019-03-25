@@ -17,7 +17,7 @@ public class MobileTokenController {
 
 	private static final Logger logger = LoggerFactory.getLogger(MobileTokenController.class);
 
-	@Reference(version = "1.0.0")
+	@Reference(version = "1.0.0", check = false)
 	private TokenService tokenService;
 
 	/**

@@ -27,7 +27,7 @@ public class UserController {
 
 	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
-	@Reference(version = "1.0.0")
+	@Reference(version = "1.0.0", check = false)
 	private UserService userService;
 
 	/**
